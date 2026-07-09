@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Book donation form</title>
+</head>
+<body>
+ <border= dashed:rgb 225% 0% 0% 25px>
+ <h1>Book donation form</h1>
+ <p><b><h3>Fill in the following form to get a chance to donate books to any organisation</b></h3></p>
+ <form>
+    <fieldset>
+        <legend><h4>Donator's information</h4></legend>
+    <label>Your name:</label>
+    <input type ="text" id="name" placeholder="Write your whole name"><br><br>
+    <label>Donator's ID</label>
+    <input type="password" id="pid" placeholder="Write your secret ID"><br><br>
+    <label>Your age</label>
+    <input type="number" id="dob" placeholder="Write your age 'in years'"><br>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend><h4>Book's information</h4></legend>
+        <label><b>Number of books</b></label>
+        <input type="number" id="dob" placeholder="select the number of books" ><br><br>
+        <label>Names of the books with the corresponding authors</label>
+        <input type="text" id="name" placeholder="Name the books with their authors"><br><br>
+        <label> <b>Genre of the books</b></label><br>
+        <input type="checkbox" name="genre" value="romance">Romance<br><br>
+        <input type="checkbox" name="genre" value="fantasy">Fantasy<br><br>
+        <input type="checkbox" name="genre" value="science fiction">Science fiction<br><br>
+        <input type="checkbox" name="genre" value="mystery">Mystery<br><br>
+        <input type="checkbox" name="genre" value="historical fiction">Historical fiction<br><br>
+        <input type="checkbox" name="genre" value="thriller">Thriller<br><br>
+        <input type="checkbox" name="genre" value="memoir & biography">Memoir & Biography<br><br>
+        <input type="checkbox" name="genre" value="self help">Self help<br><br>
+        <input type="checkbox" name="genre" value="true crime">True crime<br><br>
+        <input type="checkbox" name="genre" value="young adult">Young adult<br><br>
+        <label><b>Book's condition</label></b></label><br>
+        <input type="radio"name="condition" value="new">Brand new<br>
+        <input type="radio"name="condition" value="used but in good condition">sed but in good condition<br>
+        <input type="radio"name="condition" value="used but torn or scribbled on">Used but torn or scribbled on
+    </fieldset>
+ </form>   
+</body>
+</html>
