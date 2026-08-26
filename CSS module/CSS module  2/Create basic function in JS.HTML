@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Function Example</title>
+</head>
+<body>
+
+    <h2>JavaScript Function On-Click Demo</h2>
+
+    <!-- Button that triggers the function on-click -->
+    <button onclick="greetUser()">Click Me!</button>
+
+    <!-- Paragraph where the result will appear -->
+    <p id="message"></p>
+
+    <script>
+        // 1. Declare the function
+        function greetUser() {
+            // 2. Define the action inside the function
+            document.getElementById("message").innerText = "Hello! You clicked the button.";
+        }
+    </script>
+
+</body>
+</html>

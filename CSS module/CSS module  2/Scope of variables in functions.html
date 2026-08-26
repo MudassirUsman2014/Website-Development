@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JavaScript Variable Scope Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .output-box { background: #f4f4f4; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+  <h2>JavaScript Variable Scope</h2>
+  <div class="output-box" id="display"></div>
+
+  <script>
+    // Global variable - accessible anywhere in the script
+    const globalMessage = "I am accessible everywhere!";
+
+    function demonstrateLocalScope() {
+      // Local variable - accessible ONLY inside this function
+      const localMessage = "I am only accessible inside demonstrateLocalScope()";
+      
+      let content = "<strong>Inside Function:</strong><br>";
+      content += globalMessage + "<br>";
+      content += localMessage + "<br><br>";
+      
+      return content;
+    }
+
+    const outputElement = document.getElementById("display");
+
+    // Execute the function and display inside scope results
+    outputElement.innerHTML = demonstrateLocalScope();
+
+    // Display outside scope results
+    outputElement.innerHTML += "<strong>Outside Function:</strong><br>";
+    outputElement.innerHTML += globalMessage + "<br>";
+
+    // Safe check: verifies if 'localMessage' exists in the outside scope
+    if (typeof localMessage !== "undefined") {
+      outputElement.innerHTML += localMessage;
+    } else {
+      outputElement.innerHTML += "<em>localMessage is not accessible outside its function scope.</em>";
+    }
+  </script>
+
+</body>
+</html>
