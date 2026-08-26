@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylish Utility Suite - Algebraic Converter Suite</title>
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS for Modern Styling -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #f8fafc;
+    }
+
+    /* Glassmorphism Card Style */
+    .custom-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      height: 100%;
+    }
+
+    .custom-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Form Field Customization */
+    .form-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .custom-input, .custom-select {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .custom-select option {
+      background-color: #0f172a;
+      color: #fff;
+    }
+
+    .custom-input:focus, .custom-select:focus {
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      border-color: #6366f1;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .custom-input::placeholder {
+      color: #64748b;
+    }
+
+    /* Quick Helper Tags */
+    .tag-btn {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #a5b4fc;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .tag-btn:hover {
+      background: rgba(99, 102, 241, 0.5);
+      color: #fff;
+    }
+
+    .tag-btn-op {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+
+    .tag-btn-op:hover {
+      background: rgba(56, 189, 248, 0.5);
+      color: #fff;
+    }
+
+    .tag-btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .tag-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.5);
+      color: #fff;
+    }
+
+    /* Gradient Buttons */
+    .btn-solve {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 12px;
+      padding: 0.75rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .btn-solve:hover {
+      transform: scale(1.02);
+      filter: brightness(1.15);
+      color: white;
+    }
+
+    /* Result Box Styling */
+    .result-box {
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      padding: 1rem;
+    }
+
+    .result-text {
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+      word-break: break-word;
+    }
+
+    /* Counter Display Styling */
+    #counter-display {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-control {
+      border-radius: 12px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-control:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container my-5">
+    <div class="row justify-content-center g-4">
+      
+      <!-- Card 1: Algebraic Expression Calculator -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card custom-card p-4 d-flex flex-column justify-content-between">
+          <div>
+            <h3 class="card-title text-center mb-3 fw-bold text-white">Algebra Calculator</h3>
+            
+            <div class="mb-3">
+              <label for="algebra-expr" class="form-label">Expression</label>
+              <input type="text" id="algebra-expr" class="form-control custom-input" placeholder="e.g. (12 + 8) / 4 * sqrt(16)" onkeypress="handleKeyPress(event)">
+            </div>
+
+            <!-- Basic Operations & Quick Helper Buttons -->
+            <div class="d-flex flex-wrap gap-1 mb-3">
+              <!-- Basic Arithmetic Operations -->
+              <span class="tag-btn tag-btn-op" onclick="insertSymbol('+')">+</span>
+              <span class="tag-btn tag-btn-op" onclick="insertSymbol('-')">−</span>
+              <span class="tag-btn tag-btn-op" onclick="insertSymbol('*')">×</span>
+              <span class="tag-btn tag-btn-op" onclick="insertSymbol('/')">÷</span>
+
+              <!-- Advanced Expressions & Functions -->
+              <span class="tag-btn" onclick="insertSymbol('^')">x^y</span>
+              <span class="tag-btn" onclick="insertSymbol('sqrt(')">sqrt()</span>
+              <span class="tag-btn" onclick="insertSymbol('(')">(</span>
+              <span class="tag-btn" onclick="insertSymbol(')')">)</span>
+              <span class="tag-btn" onclick="insertSymbol('sin(')">sin()</span>
+              <span class="tag-btn" onclick="insertSymbol('cos(')">cos()</span>
+              <span class="tag-btn" onclick="insertSymbol('pi')">π</span>
+              
+              <!-- Clear Action -->
+              <span class="tag-btn tag-btn-danger ms-auto" onclick="clearExpression()">C</span>
+            </div>
+
+            <button class="btn btn-solve w-100 mb-3" onclick="solveExpression()">Evaluate</button>
+          </div>
+          
+          <div class="result-box text-center">
+            <h6 class="m-0 text-slate-400">Result:</h6>
+            <span id="calc-result" class="fw-bold result-text fs-5">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Interactive Counter -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card custom-card p-4 text-center d-flex flex-column justify-content-between">
+          <h3 class="card-title mb-4 fw-bold text-white">Interactive Counter</h3>
+          
+          <div class="my-auto">
+            <span id="counter-display">0</span>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-outline-danger btn-control" onclick="changeCount(-1)">Decrease</button>
+            <button class="btn btn-outline-secondary btn-control" onclick="resetCount()">Reset</button>
+            <button class="btn btn-outline-success btn-control" onclick="changeCount(1)">Increase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Expanded Multi Converter -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card custom-card p-4">
+          <h3 class="card-title text-center mb-4 fw-bold text-white">Multi Converter</h3>
+          
+          <!-- Category Selection -->
+          <div class="mb-3">
+            <label for="category-type" class="form-label">Category</label>
+            <select id="category-type" class="form-select custom-select" onchange="updateUnits()">
+              <option value="data">Data (Bits to PB)</option>
+              <option value="length">Length (nm to Light Years)</option>
+              <option value="mass">Mass (mg to Metric Tons)</option>
+              <option value="time">Time (ms to Years)</option>
+              <option value="speed">Speed (fps to Mach)</option>
+              <option value="area">Area (sq mm to Sq Miles)</option>
+              <option value="volume">Volume (mL to Gallons)</option>
+              <option value="temp">Temperature (°C, °F, K)</option>
+              <option value="tip">Tip & Bill Split</option>
+            </select>
+          </div>
+
+          <!-- Standard Conversion View -->
+          <div id="standard-converter-view">
+            <!-- Unit 1 (From) -->
+            <div class="mb-3">
+              <label for="val-from" class="form-label mb-1">From</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <input type="number" id="val-from" class="form-control custom-input" placeholder="0" oninput="convertFromSource('from')">
+                </div>
+                <div class="col-6">
+                  <select id="unit-from" class="form-select custom-select" onchange="convertFromSource('from')"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Unit 2 (To) -->
+            <div class="mb-3">
+              <label for="val-to" class="form-label mb-1">To</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <input type="number" id="val-to" class="form-control custom-input" placeholder="0" oninput="convertFromSource('to')">
+                </div>
+                <div class="col-6">
+                  <select id="unit-to" class="form-select custom-select" onchange="convertFromSource('from')"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special View for Tip & Bill Splitter with Multi-Currency -->
+          <div id="tip-converter-view" style="display: none;">
+            <div class="row g-2 mb-2">
+              <div class="col-7">
+                <label for="bill-amount" class="form-label mb-1">Bill Amount</label>
+                <input type="number" id="bill-amount" class="form-control custom-input" placeholder="100" oninput="calculateTip()">
+              </div>
+              <div class="col-5">
+                <label for="currency-select" class="form-label mb-1">Currency</label>
+                <select id="currency-select" class="form-select custom-select" onchange="calculateTip()">
+                  <option value="$">USD ($)</option>
+                  <option value="€">EUR (€)</option>
+                  <option value="£">GBP (£)</option>
+                  <option value="¥">JPY/CNY (¥)</option>
+                  <option value="₹">INR (₹)</option>
+                  <option value="CA$">CAD (CA$)</option>
+                  <option value="A$">AUD (A$)</option>
+                  <option value="CHF">CHF</option>
+                  <option value="kr">SEK/NOK/DKK (kr)</option>
+                  <option value="NZ$">NZD (NZ$)</option>
+                  <option value="S$">SGD (S$)</option>
+                  <option value="HK$">HKD (HK$)</option>
+                  <option value="₩">KRW (₩)</option>
+                  <option value="R$">BRL (R$)</option>
+                  <option value="Mex$">MXN (Mex$)</option>
+                  <option value="₱">PHP (₱)</option>
+                  <option value="฿">THB (฿)</option>
+                  <option value="zł">PLN (zł)</option>
+                  <option value="AED">AED</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label for="tip-percent" class="form-label mb-1">Tip %</label>
+                <input type="number" id="tip-percent" class="form-control custom-input" value="15" oninput="calculateTip()">
+              </div>
+              <div class="col-6">
+                <label for="split-people" class="form-label mb-1">Split (People)</label>
+                <input type="number" id="split-people" class="form-control custom-input" value="1" min="1" oninput="calculateTip()">
+              </div>
+            </div>
+
+            <div class="result-box text-center mt-3">
+              <div class="row">
+                <div class="col-6">
+                  <small class="text-slate-400 d-block">Tip / Person</small>
+                  <span id="tip-per-person" class="fw-bold result-text fs-6">$0.00</span>
+                </div>
+                <div class="col-6">
+                  <small class="text-slate-400 d-block">Total / Person</small>
+                  <span id="total-per-person" class="fw-bold result-text fs-6">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // 1. Algebraic Expression Parser & Solver
+    function insertSymbol(str) {
+      const input = document.getElementById('algebra-expr');
+      input.value += str;
+      input.focus();
+    }
+
+    function clearExpression() {
+      document.getElementById('algebra-expr').value = '';
+      document.getElementById('calc-result').innerText = '0';
+      document.getElementById('algebra-expr').focus();
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+        solveExpression();
+      }
+    }
+
+    function solveExpression() {
+      const exprInput = document.getElementById('algebra-expr').value.trim();
+      const resultEl = document.getElementById('calc-result');
+
+      if (!exprInput) {
+        resultEl.innerText = "0";
+        return;
+      }
+
+      try {
+        // Safe string transformations for math functions and operator symbols
+        let sanitized = exprInput
+          .replace(/[\u2212\u2013\u2014]/g, "-") // Standardize minus signs
+          .replace(/×/g, "*")
+          .replace(/÷/g, "/")
+          .replace(/\^/g, "**")
+          .replace(/sqrt\(/g, "Math.sqrt(")
+          .replace(/sin\(/g, "Math.sin(")
+          .replace(/cos\(/g, "Math.cos(")
+          .replace(/tan\(/g, "Math.tan(")
+          .replace(/log\(/g, "Math.log10(")
+          .replace(/ln\(/g, "Math.log(")
+          .replace(/\bpi\b/gi, "Math.PI")
+          .replace(/\be\b/gi, "Math.E");
+
+        // Implicit multiplication insertion: e.g., 2(3) -> 2*(3) or 3Math.sqrt -> 3*Math.sqrt
+        sanitized = sanitized.replace(/(\d+)\s*\(/g, "$1*(");
+        sanitized = sanitized.replace(/\)\s*(\d+)/g, ")*$1");
+        sanitized = sanitized.replace(/(\d+)\s*Math/g, "$1*Math");
+
+        // Execute parsing via a controlled function construct
+        const evalResult = new Function(`return ${sanitized}`)();
+
+        if (evalResult === undefined || isNaN(evalResult)) {
+          resultEl.innerText = "Invalid Expression";
+        } else if (!isFinite(evalResult)) {
+          resultEl.innerText = "Division by Zero";
+        } else {
+          resultEl.innerText = Number.isInteger(evalResult) ? evalResult : parseFloat(evalResult.toFixed(6));
+        }
+      } catch (err) {
+        resultEl.innerText = "Syntax Error";
+      }
+    }
+
+    // 2. Counter Functions
+    let count = 0;
+    const counterDisplay = document.getElementById('counter-display');
+
+    function changeCount(amount) {
+      count += amount;
+      counterDisplay.innerText = count;
+    }
+
+    function resetCount() {
+      count = 0;
+      counterDisplay.innerText = count;
+    }
+
+    // 3. Multi-Unit Converter Datasets & Functions
+    const unitData = {
+      data: {
+        units: [
+          { key: 'b', label: 'Bits (b)', factor: 1 },
+          { key: 'B', label: 'Bytes (B)', factor: 8 },
+          { key: 'KB', label: 'Kilobytes (KB)', factor: 8192 },
+          { key: 'MB', label: 'Megabytes (MB)', factor: 8388608 },
+          { key: 'GB', label: 'Gigabytes (GB)', factor: 8589934592 },
+          { key: 'TB', label: 'Terabytes (TB)', factor: 8796093022208 },
+          { key: 'PB', label: 'Petabytes (PB)', factor: 9007199254740992 }
+        ]
+      },
+      length: {
+        units: [
+          { key: 'nm', label: 'Nanometers (nm)', factor: 1e-9 },
+          { key: 'mm', label: 'Millimeters (mm)', factor: 0.001 },
+          { key: 'cm', label: 'Centimeters (cm)', factor: 0.01 },
+          { key: 'm', label: 'Meters (m)', factor: 1 },
+          { key: 'km', label: 'Kilometers (km)', factor: 1000 },
+          { key: 'in', label: 'Inches (in)', factor: 0.0254 },
+          { key: 'ft', label: 'Feet (ft)', factor: 0.3048 },
+          { key: 'yd', label: 'Yards (yd)', factor: 0.9144 },
+          { key: 'mi', label: 'Miles (mi)', factor: 1609.344 },
+          { key: 'ly', label: 'Light Years (ly)', factor: 9.461e15 }
+        ]
+      },
+      mass: {
+        units: [
+          { key: 'mg', label: 'Milligrams (mg)', factor: 0.000001 },
+          { key: 'g', label: 'Grams (g)', factor: 0.001 },
+          { key: 'kg', label: 'Kilograms (kg)', factor: 1 },
+          { key: 't', label: 'Metric Tons (t)', factor: 1000 },
+          { key: 'oz', label: 'Ounces (oz)', factor: 0.0283495 },
+          { key: 'lb', label: 'Pounds (lb)', factor: 0.453592 }
+        ]
+      },
+      time: {
+        units: [
+          { key: 'ms', label: 'Milliseconds (ms)', factor: 0.001 },
+          { key: 's', label: 'Seconds (s)', factor: 1 },
+          { key: 'min', label: 'Minutes (min)', factor: 60 },
+          { key: 'hr', label: 'Hours (hr)', factor: 3600 },
+          { key: 'd', label: 'Days (d)', factor: 86400 },
+          { key: 'wk', label: 'Weeks (wk)', factor: 604800 },
+          { key: 'yr', label: 'Years (yr)', factor: 31536000 }
+        ]
+      },
+      speed: {
+        units: [
+          { key: 'fps', label: 'Feet/sec (ft/s)', factor: 0.3048 },
+          { key: 'mps', label: 'Meters/sec (m/s)', factor: 1 },
+          { key: 'kph', label: 'Km/h', factor: 0.277778 },
+          { key: 'mph', label: 'Miles/h (mph)', factor: 0.44704 },
+          { key: 'knot', label: 'Knots', factor: 0.514444 },
+          { key: 'mach', label: 'Mach', factor: 343 }
+        ]
+      },
+      area: {
+        units: [
+          { key: 'sqmm', label: 'Sq Millimeters', factor: 0.000001 },
+          { key: 'sqcm', label: 'Sq Centimeters', factor: 0.0001 },
+          { key: 'sqm', label: 'Sq Meters', factor: 1 },
+          { key: 'sqkm', label: 'Sq Kilometers', factor: 1000000 },
+          { key: 'sqft', label: 'Sq Feet', factor: 0.092903 },
+          { key: 'acre', label: 'Acres', factor: 4046.86 },
+          { key: 'hectare', label: 'Hectares', factor: 10000 },
+          { key: 'sqmi', label: 'Sq Miles', factor: 2589988 }
+        ]
+      },
+      volume: {
+        units: [
+          { key: 'ml', label: 'Milliliters (mL)', factor: 0.001 },
+          { key: 'l', label: 'Liters (L)', factor: 1 },
+          { key: 'cubicm', label: 'Cubic Meters', factor: 1000 },
+          { key: 'tsp', label: 'Teaspoons (tsp)', factor: 0.00492892 },
+          { key: 'tbsp', label: 'Tablespoons (tbsp)', factor: 0.0147868 },
+          { key: 'cup', label: 'Cups', factor: 0.236588 },
+          { key: 'pt', label: 'Pints (pt)', factor: 0.473176 },
+          { key: 'qt', label: 'Quarts (qt)', factor: 0.946353 },
+          { key: 'gal', label: 'Gallons (gal)', factor: 3.78541 }
+        ]
+      },
+      temp: {
+        units: [
+          { key: 'c', label: 'Celsius (°C)' },
+          { key: 'f', label: 'Fahrenheit (°F)' },
+          { key: 'k', label: 'Kelvin (K)' }
+        ]
+      }
+    };
+
+    function updateUnits() {
+      const cat = document.getElementById('category-type').value;
+      const standardView = document.getElementById('standard-converter-view');
+      const tipView = document.getElementById('tip-converter-view');
+
+      if (cat === 'tip') {
+        standardView.style.display = 'none';
+        tipView.style.display = 'block';
+        calculateTip();
+        return;
+      }
+
+      standardView.style.display = 'block';
+      tipView.style.display = 'none';
+
+      const units = unitData[cat].units;
+      const selectFrom = document.getElementById('unit-from');
+      const selectTo = document.getElementById('unit-to');
+
+      selectFrom.innerHTML = '';
+      selectTo.innerHTML = '';
+
+      units.forEach((u) => {
+        selectFrom.add(new Option(u.label, u.key));
+        selectTo.add(new Option(u.label, u.key));
+      });
+
+      if (units.length > 2) {
+        selectFrom.selectedIndex = 0;
+        selectTo.selectedIndex = 1;
+      } else if (units.length > 1) {
+        selectTo.selectedIndex = 1;
+      }
+
+      document.getElementById('val-from').value = 1;
+      convertFromSource('from');
+    }
+
+    function formatNumber(num) {
+      if (isNaN(num)) return "";
+      if (Math.abs(num) >= 1e9 || (Math.abs(num) < 1e-4 && num !== 0)) {
+        return num.toExponential(4);
+      }
+      return Number.isInteger(num) ? num.toString() : parseFloat(num.toFixed(6)).toString();
+    }
+
+    // Temperature Formula Conversions
+    function convertTemp(val, fromKey, toKey) {
+      let celsius = 0;
+      if (fromKey === 'c') celsius = val;
+      else if (fromKey === 'f') celsius = (val - 32) * (5/9);
+      else if (fromKey === 'k') celsius = val - 273.15;
+
+      if (toKey === 'c') return celsius;
+      if (toKey === 'f') return (celsius * 9/5) + 32;
+      if (toKey === 'k') return celsius + 273.15;
+    }
+
+    function convertFromSource(source) {
+      const cat = document.getElementById('category-type').value;
+      const fromKey = document.getElementById('unit-from').value;
+      const toKey = document.getElementById('unit-to').value;
+
+      if (cat === 'temp') {
+        if (source === 'from') {
+          const inputVal = document.getElementById('val-from').value;
+          if (inputVal === "") { document.getElementById('val-to').value = ""; return; }
+          const converted = convertTemp(parseFloat(inputVal), fromKey, toKey);
+          document.getElementById('val-to').value = formatNumber(converted);
+        } else {
+          const inputVal = document.getElementById('val-to').value;
+          if (inputVal === "") { document.getElementById('val-from').value = ""; return; }
+          const converted = convertTemp(parseFloat(inputVal), toKey, fromKey);
+          document.getElementById('val-from').value = formatNumber(converted);
+        }
+        return;
+      }
+
+      const units = unitData[cat].units;
+      const fromUnit = units.find(u => u.key === fromKey);
+      const toUnit = units.find(u => u.key === toKey);
+
+      if (!fromUnit || !toUnit) return;
+
+      if (source === 'from') {
+        const inputVal = document.getElementById('val-from').value;
+        if (inputVal === "") { document.getElementById('val-to').value = ""; return; }
+        const baseValue = parseFloat(inputVal) * fromUnit.factor;
+        const convertedValue = baseValue / toUnit.factor;
+        document.getElementById('val-to').value = formatNumber(convertedValue);
+      } else {
+        const inputVal = document.getElementById('val-to').value;
+        if (inputVal === "") { document.getElementById('val-from').value = ""; return; }
+        const baseValue = parseFloat(inputVal) * toUnit.factor;
+        const convertedValue = baseValue / fromUnit.factor;
+        document.getElementById('val-from').value = formatNumber(convertedValue);
+      }
+    }
+
+    // Tip Calculation Logic with Currency Symbol
+    function calculateTip() {
+      const bill = parseFloat(document.getElementById('bill-amount').value) || 0;
+      const tipPct = parseFloat(document.getElementById('tip-percent').value) || 0;
+      const people = parseInt(document.getElementById('split-people').value) || 1;
+      const currency = document.getElementById('currency-select').value || "$";
+
+      const totalTip = bill * (tipPct / 100);
+      const grandTotal = bill + totalTip;
+
+      const tipPerPerson = totalTip / (people > 0 ? people : 1);
+      const totalPerPerson = grandTotal / (people > 0 ? people : 1);
+
+      document.getElementById('tip-per-person').innerText = currency + " " + tipPerPerson.toFixed(2);
+      document.getElementById('total-per-person').innerText = currency + " " + totalPerPerson.toFixed(2);
+    }
+
+    // Initialize units on load
+    updateUnits();
+  </script>
+
+  <!-- Bootstrap 5 JS Bundle CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

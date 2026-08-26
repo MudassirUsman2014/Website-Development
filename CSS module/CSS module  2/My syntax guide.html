@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML, CSS, Bootstrap & JS Demo</title>
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-card {
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+    .custom-card:hover {
+      transform: translateY(-5px);
+    }
+    #counter-display {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container my-5">
+    <div class="row justify-content-center g-4">
+      
+      <!-- Card 1: 4-Operation Calculator -->
+      <div class="col-md-6 col-lg-5">
+        <div class="card custom-card p-4">
+          <h3 class="card-title text-center text-primary mb-3">4-Operation Calculator</h3>
+          
+          <div class="mb-3">
+            <label for="num1" class="form-label">First Number</label>
+            <input type="number" id="num1" class="form-control" placeholder="Enter first number">
+          </div>
+
+          <div class="mb-3">
+            <label for="num2" class="form-label">Second Number</label>
+            <input type="number" id="num2" class="form-control" placeholder="Enter second number">
+          </div>
+          
+          <!-- Operation Buttons -->
+          <div class="d-flex justify-content-between gap-2 mb-3">
+            <button class="btn btn-primary flex-fill fw-bold" onclick="calculate('+')">+</button>
+            <button class="btn btn-warning flex-fill fw-bold text-white" onclick="calculate('-')">-</button>
+            <button class="btn btn-info flex-fill fw-bold text-white" onclick="calculate('*')">×</button>
+            <button class="btn btn-danger flex-fill fw-bold" onclick="calculate('/')">÷</button>
+          </div>
+          
+          <div class="mt-4 text-center">
+            <h5>Result: <span id="calc-result" class="text-success">0</span></h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Interactive Counter -->
+      <div class="col-md-6 col-lg-5">
+        <div class="card custom-card p-4 text-center">
+          <h3 class="card-title text-danger mb-3">Interactive Counter</h3>
+          
+          <div class="my-3">
+            <span id="counter-display" class="text-dark">0</span>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-danger" onclick="changeCount(-1)">Decrease</button>
+            <button class="btn btn-secondary" onclick="resetCount()">Reset</button>
+            <button class="btn btn-success" onclick="changeCount(1)">Increase</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Calculator Function handling all 4 operations
+    function calculate(operator) {
+      const num1 = parseFloat(document.getElementById('num1').value) || 0;
+      const num2 = parseFloat(document.getElementById('num2').value) || 0;
+      let result = 0;
+
+      switch (operator) {
+        case '+':
+          result = num1 + num2;
+          break;
+        case '-':
+          result = num1 - num2;
+          break;
+        case '*':
+          result = num1 * num2;
+          break;
+        case '/':
+          if (num2 === 0) {
+            result = "Cannot divide by zero!";
+          } else {
+            result = num1 / num2;
+          }
+          break;
+      }
+
+      document.getElementById('calc-result').innerText = result;
+    }
+
+    // Counter Functions
+    let count = 0;
+    const counterDisplay = document.getElementById('counter-display');
+
+    function changeCount(amount) {
+      count += amount;
+      counterDisplay.innerText = count;
+    }
+
+    function resetCount() {
+      count = 0;
+      counterDisplay.innerText = count;
+    }
+  </script>
+
+  <!-- Bootstrap 5 JS Bundle CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
