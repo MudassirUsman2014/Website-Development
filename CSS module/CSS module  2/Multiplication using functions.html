@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiplication Using Functions</title>
+</head>
+<body>
+
+    <h2>Multiplication Function Demo</h2>
+    <p>Click the button below to perform multiplication with an undefined parameter handling.</p>
+
+    <!-- Calling multiply with only one argument so 'b' defaults to undefined -->
+    <button onclick="multiply(4)">Click Me!</button>
+
+    <!-- Paragraph where the result will be displayed -->
+    <p id="result"></p>
+
+    <script>
+        function multiply(a, b) {
+            // Check if the second parameter 'b' is undefined
+            if (b === undefined) {
+                alert("The value of b is undefined");
+                b = 5; // Default value assigned to b
+            }
+
+            // Perform multiplication
+            var result = a * b;
+
+            // Display the result in the HTML element
+            document.getElementById("result").innerHTML = "The product is: " + result;
+        }
+    </script>
+
+</body>
+</html>
