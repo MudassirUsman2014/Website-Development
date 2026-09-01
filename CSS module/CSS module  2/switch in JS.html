@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Switch Statement Activity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f4f4f9;
+      color: #333;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .btn-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #result-card {
+      margin-top: 25px;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      background-color: #fff;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Activity: How Switch Statements Work</h1>
+  <p>
+    A <code>switch</code> statement evaluates an expression against multiple matching <code>case</code> clauses, executing code associated with the matching case.
+  </p>
+
+  <h2>Interactive Project: Weekly Planner</h2>
+  <p>Select a day to check the scheduled activity:</p>
+
+  <div class="btn-container">
+    <button onclick="checkSchedule('Monday')">Monday</button>
+    <button onclick="checkSchedule('Wednesday')">Wednesday</button>
+    <button onclick="checkSchedule('Friday')">Friday</button>
+    <button onclick="checkSchedule('Saturday')">Saturday</button>
+    <button onclick="checkSchedule('Holiday')">Unknown Day</button>
+  </div>
+
+  <div id="result-card">
+    <h3 id="day-title">Select a day above</h3>
+    <p id="schedule-text">Click a button to trigger the switch evaluation.</p>
+  </div>
+
+  <script>
+    function checkSchedule(day) {
+      let activity = "";
+
+      // Switch statement evaluating the selected day
+      switch (day) {
+        case "Monday":
+        case "Tuesday":
+          activity = "Start the week strong with JavaScript coding practice!";
+          break;
+        case "Wednesday":
+        case "Thursday":
+          activity = "Mid-week review and algorithm problem solving.";
+          break;
+        case "Friday":
+          activity = "Finish weekly projects and prepare for the weekend.";
+          break;
+        case "Saturday":
+        case "Sunday":
+          activity = "Weekend! Rest, relax, and work on side projects.";
+          break;
+        default:
+          activity = "No schedule found for this entry.";
+          break;
+      }
+
+      // Updating the DOM elements
+      document.getElementById("day-title").innerText = day;
+      document.getElementById("schedule-text").innerText = activity;
+    }
+  </script>
+
+</body>
+</html>
