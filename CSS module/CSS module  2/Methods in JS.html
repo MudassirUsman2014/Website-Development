@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript String Methods Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .output-box {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #eef7fc;
+      border-left: 4px solid #3498db;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JavaScript Inbuilt String Methods</h1>
+
+  <div class="card">
+    <label for="strInput">Enter a String:</label>
+    <input type="text" id="strInput" value="Hello JavaScript World">
+
+    <div class="button-group">
+      <button onclick="runUpperCase()">toUpperCase()</button>
+      <button onclick="runLowerCase()">toLowerCase()</button>
+      <button onclick="runStartsWith()">startsWith("Hello")</button>
+      <button onclick="runTest()">RegEx test(/World/)</button>
+    </div>
+
+    <div class="output-box">
+      <strong>Result:</strong> <span id="result">Perform an action above to see output.</span>
+    </div>
+  </div>
+
+  <script>
+    function getInputValue() {
+      return document.getElementById("strInput").value;
+    }
+
+    function showResult(output) {
+      document.getElementById("result").innerText = output;
+    }
+
+    // String Method: toUpperCase()
+    function runUpperCase() {
+      const text = getInputValue();
+      showResult(text.toUpperCase());
+    }
+
+    // String Method: toLowerCase()
+    function runLowerCase() {
+      const text = getInputValue();
+      showResult(text.toLowerCase());
+    }
+
+    // String Method: startsWith()
+    function runStartsWith() {
+      const text = getInputValue();
+      const checkWord = "Hello";
+      const isMatching = text.startsWith(checkWord);
+      showResult(`Does text start with "${checkWord}"? ${isMatching}`);
+    }
+
+    // RegEx Method: test()
+    function runTest() {
+      const text = getInputValue();
+      const pattern = /World/;
+      const isFound = pattern.test(text);
+      showResult(`Does text match pattern /World/? ${isFound}`);
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Shooter with Minimap & Ruins</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+      user-select: none;
+    }
+    #hud {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      pointer-events: none;
+    }
+    #minimap-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      border: 3px solid #00ff88;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+    #minimap {
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 18, 0.85);
+    }
+    #crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 2px solid black;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    #instructions, #game-over {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      background: rgba(0,0,0,0.85);
+      padding: 30px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #game-over { display: none; }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    Health: <span id="health" style="color: #00ff88;">100</span> | 
+    Score: <span id="score">0</span>
+  </div>
+  
+  <div id="minimap-container">
+    <canvas id="minimap" width="150" height="150"></canvas>
+  </div>
+
+  <div id="crosshair"></div>
+  
+  <div id="instructions">
+    <h1>CLICK TO START</h1>
+    <p>W, A, S, D - Move<br>SPACE - Jump<br>Mouse - Aim<br>Left Click - Shoot</p>
+  </div>
+
+  <div id="game-over">
+    <h1 style="color: #ff3366;">GAME OVER</h1>
+    <p>Click to Play Again</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    let health = 100;
+    let score = 0;
+    let isGameOver = false;
+
+    // Physics / Jump variables
+    let velocityY = 0;
+    const gravity = -0.015;
+    const jumpStrength = 0.35;
+    let isGrounded = true;
+    const playerRadius = 0.5;
+
+    const playerBullets = [];
+    const enemyBullets = [];
+    const enemies = [];
+    const walls = [];
+    const keys = {};
+
+    // 1. Scene, Camera & Renderer
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0a12);
+    scene.fog = new THREE.FogExp2(0x0a0a12, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.6, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // 2. Minimap Setup
+    const minimapCanvas = document.getElementById('minimap');
+    const ctx = minimapCanvas.getContext('2d');
+
+    // 3. Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(20, 40, 20);
+    scene.add(dirLight);
+
+    // 4. Floor Grid
+    const grid = new THREE.GridHelper(200, 50, 0x00ff88, 0x333333);
+    scene.add(grid);
+
+    // 5. Generate Ruins (Cover Obstacles)
+    function createRuins() {
+      const wallMat = new THREE.MeshPhongMaterial({ color: 0x555566, flatShading: true });
+      
+      const ruinLayout = [
+        // x, z, width, height, depth
+        [10, -10, 8, 4, 1.5],
+        [-12, -15, 1.5, 5, 10],
+        [0, -25, 12, 3.5, 1.5],
+        [-18, 10, 6, 4, 6],
+        [15, 15, 1.5, 4, 8],
+        [-8, 18, 10, 3, 1.5],
+        [20, -20, 6, 6, 6]
+      ];
+
+      ruinLayout.forEach(([x, z, w, h, d]) => {
+        const geo = new THREE.BoxGeometry(w, h, d);
+        const wall = new THREE.Mesh(geo, wallMat);
+        wall.position.set(x, h / 2, z);
+        scene.add(wall);
+
+        // Store bounding box data for collision detection
+        walls.push({
+          mesh: wall,
+          minX: x - w / 2,
+          maxX: x + w / 2,
+          minZ: z - d / 2,
+          maxZ: z + d / 2
+        });
+      });
+    }
+    createRuins();
+
+    // 6. Player Look Controls & Pointer Lock
+    let yaw = 0, pitch = 0;
+    const instructions = document.getElementById('instructions');
+    const gameOverOverlay = document.getElementById('game-over');
+
+    function lockPointer() {
+      if (!isGameOver) document.body.requestPointerLock();
+    }
+
+    instructions.addEventListener('click', lockPointer);
+    gameOverOverlay.addEventListener('click', resetGame);
+
+    document.addEventListener('pointerlockchange', () => {
+      if (document.pointerLockElement === document.body) {
+        instructions.style.display = 'none';
+        gameOverOverlay.style.display = 'none';
+      } else if (!isGameOver) {
+        instructions.style.display = 'block';
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (document.pointerLockElement !== document.body) return;
+      yaw -= e.movementX * 0.002;
+      pitch -= e.movementY * 0.002;
+      pitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, pitch));
+      
+      camera.rotation.order = 'YXZ';
+      camera.rotation.y = yaw;
+      camera.rotation.x = pitch;
+    });
+
+    document.addEventListener('keydown', (e) => keys[e.code] = true);
+    document.addEventListener('keyup', (e) => keys[e.code] = false);
+
+    // 7. Shooting Mechanism
+    document.addEventListener('mousedown', (e) => {
+      if (document.pointerLockElement !== document.body || e.button !== 0 || isGameOver) return;
+
+      const bulletGeo = new THREE.SphereGeometry(0.12, 8, 8);
+      const bulletMat = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+      const bullet = new THREE.Mesh(bulletGeo, bulletMat);
+
+      bullet.position.copy(camera.position);
+      const dir = new THREE.Vector3();
+      camera.getWorldDirection(dir);
+      bullet.userData.velocity = dir.multiplyScalar(1.5);
+
+      scene.add(bullet);
+      playerBullets.push(bullet);
+    });
+
+    // 8. NPC Spawning
+    function createEnemyMesh() {
+      const group = new THREE.Group();
+      const bodyGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.8, 8);
+      const bodyMat = new THREE.MeshPhongMaterial({ color: 0xff2200 });
+      const body = new THREE.Mesh(bodyGeo, bodyMat);
+      body.position.y = 0.9;
+      group.add(body);
+
+      const visorGeo = new THREE.BoxGeometry(0.4, 0.2, 0.3);
+      const visorMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      const visor = new THREE.Mesh(visorGeo, visorMat);
+      visor.position.set(0, 1.3, -0.3);
+      group.add(visor);
+
+      return group;
+    }
+
+    function spawnEnemy() {
+      const enemy = createEnemyMesh();
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 20 + Math.random() * 25;
+
+      enemy.position.set(
+        camera.position.x + Math.sin(angle) * distance,
+        0,
+        camera.position.z + Math.cos(angle) * distance
+      );
+
+      enemy.userData = {
+        lastShotTime: Date.now() + Math.random() * 2000,
+        fireRate: 2000 + Math.random() * 1500,
+        speed: 0.03 + Math.random() * 0.02
+      };
+
+      scene.add(enemy);
+      enemies.push(enemy);
+    }
+
+    function enemyShoot(enemy) {
+      const bulletGeo = new THREE.SphereGeometry(0.15, 8, 8);
+      const bulletMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+      const bullet = new THREE.Mesh(bulletGeo, bulletMat);
+
+      bullet.position.copy(enemy.position);
+      bullet.position.y += 1.3;
+
+      const dir = new THREE.Vector3();
+      dir.subVectors(camera.position, bullet.position).normalize();
+      bullet.userData.velocity = dir.multiplyScalar(0.6);
+
+      scene.add(bullet);
+      enemyBullets.push(bullet);
+    }
+
+    for (let i = 0; i < 5; i++) spawnEnemy();
+
+    // 9. Simple Collision Detection with Walls
+    function checkWallCollision(newPos) {
+      for (let wall of walls) {
+        if (
+          newPos.x + playerRadius > wall.minX &&
+          newPos.x - playerRadius < wall.maxX &&
+          newPos.z + playerRadius > wall.minZ &&
+          newPos.z - playerRadius < wall.maxZ
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function checkBulletWallCollision(pos) {
+      for (let wall of walls) {
+        if (
+          pos.x > wall.minX && pos.x < wall.maxX &&
+          pos.z > wall.minZ && pos.z < wall.maxZ &&
+          pos.y < wall.mesh.geometry.parameters.height
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // 10. Minimap Drawing Logic
+    function drawMinimap() {
+      const scale = 2; // Map zoom
+      const mapRadius = 75;
+
+      ctx.clearRect(0, 0, 150, 150);
+
+      // Draw Walls
+      ctx.fillStyle = "#666688";
+      walls.forEach(w => {
+        const relMinX = mapRadius + (w.minX - camera.position.x) * scale;
+        const relMinZ = mapRadius + (w.minZ - camera.position.z) * scale;
+        const width = (w.maxX - w.minX) * scale;
+        const height = (w.maxZ - w.minZ) * scale;
+        ctx.fillRect(relMinX, relMinZ, width, height);
+      });
+
+      // Draw Enemies
+      ctx.fillStyle = "#ff2200";
+      enemies.forEach(e => {
+        const ex = mapRadius + (e.position.x - camera.position.x) * scale;
+        const ez = mapRadius + (e.position.z - camera.position.z) * scale;
+        ctx.beginPath();
+        ctx.arc(ex, ez, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Draw Player Direction Dot
+      ctx.fillStyle = "#00ff88";
+      ctx.beginPath();
+      ctx.arc(mapRadius, mapRadius, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#00ff88";
+      ctx.beginPath();
+      ctx.moveTo(mapRadius, mapRadius);
+      ctx.lineTo(
+        mapRadius - Math.sin(yaw) * 10,
+        mapRadius - Math.cos(yaw) * 10
+      );
+      ctx.stroke();
+    }
+
+    // 11. Game Reset
+    function resetGame() {
+      health = 100;
+      score = 0;
+      isGameOver = false;
+      document.getElementById('health').innerText = health;
+      document.getElementById('score').innerText = score;
+
+      enemies.forEach(e => scene.remove(e));
+      playerBullets.forEach(b => scene.remove(b));
+      enemyBullets.forEach(b => scene.remove(b));
+
+      enemies.length = 0;
+      playerBullets.length = 0;
+      enemyBullets.length = 0;
+
+      camera.position.set(0, 1.6, 0);
+      for (let i = 0; i < 5; i++) spawnEnemy();
+      
+      lockPointer();
+    }
+
+    function triggerGameOver() {
+      isGameOver = true;
+      document.exitPointerLock();
+      gameOverOverlay.style.display = 'block';
+    }
+
+    // 12. Main Game Loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (isGameOver) {
+        renderer.render(scene, camera);
+        return;
+      }
+
+      // Movement & Wall Collisions
+      const speed = 0.12;
+      const moveDir = new THREE.Vector3();
+      if (keys['KeyW']) moveDir.z -= 1;
+      if (keys['KeyS']) moveDir.z += 1;
+      if (keys['KeyA']) moveDir.x -= 1;
+      if (keys['KeyD']) moveDir.x += 1;
+
+      moveDir.normalize();
+      moveDir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+
+      const nextX = camera.position.clone().addScaledVector(new THREE.Vector3(moveDir.x, 0, 0), speed);
+      if (!checkWallCollision(nextX)) camera.position.x = nextX.x;
+
+      const nextZ = camera.position.clone().addScaledVector(new THREE.Vector3(0, 0, moveDir.z), speed);
+      if (!checkWallCollision(nextZ)) camera.position.z = nextZ.z;
+
+      // Jumping & Gravity
+      if (keys['Space'] && isGrounded) {
+        velocityY = jumpStrength;
+        isGrounded = false;
+      }
+
+      velocityY += gravity;
+      camera.position.y += velocityY;
+
+      if (camera.position.y <= 1.6) {
+        camera.position.y = 1.6;
+        velocityY = 0;
+        isGrounded = true;
+      }
+
+      const now = Date.now();
+
+      // Enemy AI
+      enemies.forEach(enemy => {
+        enemy.lookAt(camera.position.x, enemy.position.y, camera.position.z);
+        
+        if (enemy.position.distanceTo(camera.position) > 8) {
+          enemy.translateZ(enemy.userData.speed);
+        }
+
+        if (now - enemy.userData.lastShotTime > enemy.userData.fireRate) {
+          enemyShoot(enemy);
+          enemy.userData.lastShotTime = now;
+        }
+      });
+
+      // Player Bullets Loop
+      for (let i = playerBullets.length - 1; i >= 0; i--) {
+        const b = playerBullets[i];
+        b.position.add(b.userData.velocity);
+
+        if (checkBulletWallCollision(b.position)) {
+          scene.remove(b);
+          playerBullets.splice(i, 1);
+          continue;
+        }
+
+        for (let j = enemies.length - 1; j >= 0; j--) {
+          const e = enemies[j];
+          if (b.position.distanceTo(e.position.clone().setY(e.position.y + 0.9)) < 1.0) {
+            scene.remove(e);
+            enemies.splice(j, 1);
+            scene.remove(b);
+            playerBullets.splice(i, 1);
+
+            score += 25;
+            document.getElementById('score').innerText = score;
+            spawnEnemy();
+            break;
+          }
+        }
+
+        if (b && b.position.distanceTo(camera.position) > 120) {
+          scene.remove(b);
+          playerBullets.splice(i, 1);
+        }
+      }
+
+      // Enemy Bullets Loop
+      for (let i = enemyBullets.length - 1; i >= 0; i--) {
+        const b = enemyBullets[i];
+        b.position.add(b.userData.velocity);
+
+        if (checkBulletWallCollision(b.position)) {
+          scene.remove(b);
+          enemyBullets.splice(i, 1);
+          continue;
+        }
+
+        if (b.position.distanceTo(camera.position) < 0.8) {
+          health -= 10;
+          document.getElementById('health').innerText = health;
+          scene.remove(b);
+          enemyBullets.splice(i, 1);
+
+          if (health <= 0) triggerGameOver();
+          continue;
+        }
+
+        if (b.position.distanceTo(camera.position) > 120) {
+          scene.remove(b);
+          enemyBullets.splice(i, 1);
+        }
+      }
+
+      drawMinimap();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
