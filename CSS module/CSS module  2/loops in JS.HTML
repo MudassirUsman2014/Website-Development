@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding Loops in JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #005f73;
+    }
+    .output {
+      background: #eef2f5;
+      padding: 10px;
+      border-left: 4px solid #008CBA;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>JavaScript Loops Playground</h1>
+    <p>Learn how loops make repeating tasks efficient and easy.</p>
+  </header>
+
+  <section class="card">
+    <h2>Why Are Loops Useful in JS?</h2>
+    <p>Loops allow you to run a block of code repeatedly without writing the same lines over and over. They save time, reduce errors, and are essential for working with lists of data (like arrays or DOM elements).</p>
+  </section>
+
+  <section class="card">
+    <h2>1. The <code>for</code> Loop</h2>
+    <p>Best when you know in advance how many times you want to repeat an action.</p>
+    <button onclick="runForLoop()">Run For Loop (1 to 5)</button>
+    <div id="for-output" class="output">Click the button to see the loop run.</div>
+  </section>
+
+  <section class="card">
+    <h2>2. The <code>while</code> Loop</h2>
+    <p>Repeats a block of code as long as a specified condition remains true.</p>
+    <button onclick="runWhileLoop()">Run While Loop (Countdown)</button>
+    <div id="while-output" class="output">Click the button to see the loop run.</div>
+  </section>
+
+  <section class="card">
+    <h2>3. The <code>for...of</code> Loop</h2>
+    <p>Designed specifically to iterate through elements of an array easily.</p>
+    <button onclick="runForOfLoop()">Loop Through Array</button>
+    <div id="array-output" class="output">Click the button to see the loop run.</div>
+  </section>
+
+  <script>
+    // 1. For Loop Example
+    function runForLoop() {
+      let result = "For Loop Output:\n";
+      for (let i = 1; i <= 5; i++) {
+        result += `Iteration number: ${i}\n`;
+      }
+      document.getElementById("for-output").innerText = result;
+    }
+
+    // 2. While Loop Example
+    function runWhileLoop() {
+      let result = "While Loop Countdown:\n";
+      let count = 5;
+      while (count > 0) {
+        result += `Countdown: ${count}\n`;
+        count--;
+      }
+      result += "Blast off! 🚀";
+      document.getElementById("while-output").innerText = result;
+    }
+
+    // 3. For...Of Loop Example
+    function runForOfLoop() {
+      const fruits = ["Apple 🍎", "Banana 🍌", "Cherry 🍒", "Date 🌴"];
+      let result = "Iterating over array elements:\n";
+      for (const fruit of fruits) {
+        result += `Fruit: ${fruit}\n`;
+      }
+      document.getElementById("array-output").innerText = result;
+    }
+  </script>
+
+</body>
+</html>
