@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Phone Contact</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+    }
+    .section {
+      margin-top: 16px;
+      padding: 12px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #4a90e2;
+      border-radius: 4px;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p {
+      margin: 6px 0;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>📱 Contact Card</h2>
+    
+    <!-- Displayed using Dot Notation -->
+    <div class="section">
+      <div class="section-title">Dot Notation</div>
+      <p id="dot-name"></p>
+      <p id="dot-phone"></p>
+    </div>
+
+    <!-- Displayed using Bracket Notation -->
+    <div class="section">
+      <div class="section-title">Bracket Notation</div>
+      <p id="bracket-school"></p>
+      <p id="bracket-city"></p>
+    </div>
+  </div>
+
+  <script>
+    // 1. JavaScript Object storing contact details
+    var myContact = {
+      name: "Riya Sharma",
+      phone: "98765 43210",
+      school: "Sunrise Academy",
+      city: "Mumbai"
+    };
+
+    // 2. Accessing properties using Dot Notation
+    document.getElementById("dot-name").textContent = "Name: " + myContact.name;
+    document.getElementById("dot-phone").textContent = "Phone: " + myContact.phone;
+
+    // 3. Accessing properties using Bracket Notation
+    document.getElementById("bracket-school").textContent = "School: " + myContact["school"];
+    document.getElementById("bracket-city").textContent = "City: " + myContact["city"];
+  </script>
+
+</body>
+</html>
