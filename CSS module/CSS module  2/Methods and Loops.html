@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Methods and Loops</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .result-box {
+            background-color: #eef2f5;
+            padding: 10px 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>JavaScript Methods and Loops Demo</h2>
+
+        <h3>1. Loop Output (Numbers 1 to 10)</h3>
+        <div class="result-box" id="loop-result"></div>
+
+        <h3>2. Rounded Random Number</h3>
+        <div class="result-box" id="random-result"></div>
+
+        <h3>3. Current Date</h3>
+        <div class="result-box" id="date-result"></div>
+    </div>
+
+    <script>
+        // 1. Using a 'for' loop to print numbers from 1 to 10
+        var numberText = "";
+        for (var i = 1; i <= 10; i++) {
+            numberText += i + "<br>";
+        }
+        document.getElementById("loop-result").innerHTML = numberText;
+
+        // 2. Generating and rounding a random number between 0 and 99 using Math methods
+        var randomNumber = Math.floor(Math.random() * 100);
+        document.getElementById("random-result").innerHTML = "The random value is: <strong>" + randomNumber + "</strong>";
+
+        // 3. Getting the current date using Date built-in methods
+        var today = new Date();
+        document.getElementById("date-result").innerHTML = "Today's Date is: <strong>" + today.toDateString() + "</strong>";
+    </script>
+
+</body>
+</html>
