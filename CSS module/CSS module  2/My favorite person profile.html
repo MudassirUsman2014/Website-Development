@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Favourite Person Profile</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .profile-card {
+      max-width: 500px;
+      margin: 50px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .profile-img {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #6c5ce7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card profile-card p-4 text-center bg-white">
+      <!-- Profile Header -->
+      <img src="https://via.placeholder.com/150" id="mother-photo" class="profile-img mx-auto mb-3" alt="Mother's Photo">
+      <h2 id="person-title" class="fw-bold text-primary"></h2>
+      <p id="person-relation" class="text-muted fw-semibold mb-3"></p>
+
+      <hr>
+
+      <!-- Details List -->
+      <ul class="list-group list-group-flush text-start">
+        <li class="list-group-item"><strong>Full Name:</strong> <span id="mother-name"></span></li>
+        <li class="list-group-item"><strong>Favorite Hobby:</strong> <span id="mother-hobby"></span></li>
+        <li class="list-group-item"><strong>Superpower:</strong> <span id="mother-superpower"></span></li>
+        <li class="list-group-item"><strong>Favorite Quote:</strong> <em id="mother-quote"></em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
