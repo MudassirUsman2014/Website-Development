@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding the Call Stack</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --text: #1e293b;
+      --accent: #ef4444;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    ul, ol {
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .interactive-section {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .demo-container {
+        flex-direction: row;
+      }
+    }
+
+    .controls {
+      flex: 1;
+    }
+
+    .stack-visualizer {
+      flex: 1;
+      display: flex;
+      flex-direction: column-reverse;
+      min-height: 250px;
+      border: 2px dashed #cbd5e1;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      padding: 10px;
+      background: #f1f5f9;
+      position: relative;
+    }
+
+    .stack-frame {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+      animation: push 0.3s ease-out;
+    }
+
+    @keyframes push {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+    }
+
+    button.reset {
+      background: var(--accent);
+    }
+
+    button.reset:hover {
+      background: #dc2626;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    .log-box {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: monospace;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Understanding the Call Stack</h1>
+      <p class="subtitle">Learn what the call stack is and how JavaScript manages function execution.</p>
+    </header>
+
+    <div class="grid">
+      <!-- Section 1: What is the Call Stack? -->
+      <div class="card">
+        <h2>What is a Call Stack?</h2>
+        <p>A <strong>Call Stack</strong> is a mechanism for an interpreter (like JavaScript in a browser) to keep track of its place in a script that calls multiple functions.</p>
+        <ul>
+          <li><strong>LIFO Structure:</strong> Operates on a <em>Last In, First Out</em> principle.</li>
+          <li><strong>Single-Threaded:</strong> JavaScript executes one task at a time from top to bottom of the stack.</li>
+          <li><strong>Execution Context:</strong> Each function invocation creates a new frame on top of the stack.</li>
+        </ul>
+      </div>
+
+      <!-- Section 2: How It Works -->
+      <div class="card">
+        <h2>How Does It Work?</h2>
+        <ol>
+          <li><strong>Function Call (Push):</strong> Calling a function adds (pushes) it to the top of the call stack.</li>
+          <li><strong>Execution:</strong> The engine executes the function currently at the top of the stack.</li>
+          <li><strong>Completion (Pop):</strong> When a function finishes, it is removed (popped) from the stack, and execution resumes where it left off in the caller.</li>
+          <li><strong>Stack Overflow:</strong> Calling functions infinitely without returning leads to a stack overflow error.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Section 3: Interactive Visualizer -->
+    <div class="interactive-section">
+      <h2>Interactive Demo</h2>
+      <p>Click step-by-step to visualize how nested functions are pushed onto and popped off the call stack.</p>
+      
+      <div class="demo-container">
+        <div class="controls">
+          <pre><code>function main() {
+  first();
+}
+
+function first() {
+  second();
+}
+
+function second() {
+  return "Done!";
+}</code></pre>
+          <div class="btn-group">
+            <button id="nextBtn" onclick="nextStep()">Next Step</button>
+            <button class="reset" onclick="resetStack()">Reset</button>
+          </div>
+          <div class="log-box" id="statusLog">Click "Next Step" to begin execution.</div>
+        </div>
+
+        <div class="stack-visualizer" id="stackVisualizer">
+          <!-- Stack frames will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const steps = [
+      { action: 'push', name: 'main()', log: '1. main() is called and pushed to the stack.' },
+      { action: 'push', name: 'first()', log: '2. main() calls first(). first() is pushed to the top.' },
+      { action: 'push', name: 'second()', log: '3. first() calls second(). second() is pushed to the top.' },
+      { action: 'pop', name: 'second()', log: '4. second() completes and returns. It is popped off.' },
+      { action: 'pop', name: 'first()', log: '5. first() completes and returns. It is popped off.' },
+      { action: 'pop', name: 'main()', log: '6. main() completes. Call stack is now empty!' }
+    ];
+
+    let currentStep = 0;
+    const visualizer = document.getElementById('stackVisualizer');
+    const statusLog = document.getElementById('statusLog');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function nextStep() {
+      if (currentStep >= steps.length) return;
+
+      const step = steps[currentStep];
+      statusLog.textContent = step.log;
+
+      if (step.action === 'push') {
+        const frame = document.createElement('div');
+        frame.className = 'stack-frame';
+        frame.id = `frame-${step.name}`;
+        frame.textContent = step.name;
+        visualizer.appendChild(frame);
+      } else if (step.action === 'pop') {
+        const lastFrame = visualizer.lastElementChild;
+        if (lastFrame) {
+          visualizer.removeChild(lastFrame);
+        }
+      }
+
+      currentStep++;
+      if (currentStep === steps.length) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.5';
+      }
+    }
+
+    function resetStack() {
+      currentStep = 0;
+      visualizer.innerHTML = '';
+      statusLog.textContent = 'Click "Next Step" to begin execution.';
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = '1';
+    }
+  </script>
+</body>
+</html>

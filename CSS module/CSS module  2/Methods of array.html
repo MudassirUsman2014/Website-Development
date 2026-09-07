@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methods in Arrays</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    h1 { color: #2c3e50; }
+    .card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 8px 12px;
+      margin-right: 5px;
+      margin-top: 5px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #2980b9; }
+    .result {
+      font-weight: bold;
+      color: #27ae60;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Activity: Array Methods Demo</h1>
+  <p>Learn how JavaScript array methods manipulate data dynamically.</p>
+
+  <div class="card">
+    <h3>Current Array:</h3>
+    <p id="array-display">[10, 20, 30, 40, 50]</p>
+  </div>
+
+  <div class="card">
+    <h3>Array Operations</h3>
+    <button onclick="addItem()">push(60)</button>
+    <button onclick="removeItem()">pop()</button>
+    <button onclick="doubleValues()">map() x 2</button>
+    <button onclick="filterValues()">filter() > 25</button>
+    <button onclick="resetArray()">Reset</button>
+
+    <div class="result" id="output">Result will appear here.</div>
+  </div>
+
+  <script>
+    let numbers = [10, 20, 30, 40, 50];
+
+    function updateDisplay() {
+      document.getElementById("array-display").innerText = JSON.stringify(numbers);
+    }
+
+    // Add element to end of array
+    function addItem() {
+      numbers.push(60);
+      updateDisplay();
+      document.getElementById("output").innerText = "Added 60 using push()";
+    }
+
+    // Remove last element
+    function removeItem() {
+      let removed = numbers.pop();
+      updateDisplay();
+      document.getElementById("output").innerText = "Removed " + removed + " using pop()";
+    }
+
+    // Transform elements with map()
+    function doubleValues() {
+      numbers = numbers.map(num => num * 2);
+      updateDisplay();
+      document.getElementById("output").innerText = "Doubled all values using map()";
+    }
+
+    // Filter elements based on a condition
+    function filterValues() {
+      numbers = numbers.filter(num => num > 25);
+      updateDisplay();
+      document.getElementById("output").innerText = "Filtered values greater than 25 using filter()";
+    }
+
+    // Reset array to default
+    function resetArray() {
+      numbers = [10, 20, 30, 40, 50];
+      updateDisplay();
+      document.getElementById("output").innerText = "Array reset to original.";
+    }
+  </script>
+
+</body>
+</html>

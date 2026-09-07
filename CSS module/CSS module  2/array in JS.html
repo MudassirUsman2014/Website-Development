@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Arrays Activity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+      background-color: #f4f6f9;
+    }
+    .card {
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #333;
+      margin-top: 0;
+    }
+    .code-box {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: auto;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px 5px 5px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .output-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e9ecef;
+      border-left: 4px solid #007bff;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>JavaScript Arrays & Accessing Elements</h1>
+    <p>An <strong>Array</strong> is a special variable that can hold more than one value at a time. JavaScript arrays use <strong>zero-based indexing</strong>, meaning the first element is at index <code>0</code>.</p>
+
+    <h3>Sample Array Declaration:</h3>
+    <div class="code-box">
+      let fruits = ["Apple", "Banana", "Cherry", "Mango"];
+    </div>
+
+    <h3>Try Accessing Elements:</h3>
+    <button onclick="accessElement(0)">Access Index 0</button>
+    <button onclick="accessElement(1)">Access Index 1</button>
+    <button onclick="accessElement(2)">Access Index 2</button>
+    <button onclick="accessElement(3)">Access Index 3</button>
+    <button onclick="showLength()">Get Array Length</button>
+
+    <div class="output-box" id="output">Click a button above to see the result.</div>
+  </div>
+
+  <script>
+    // Defining the array
+    const fruits = ["Apple", "Banana", "Cherry", "Mango"];
+
+    // Function to access specific element by index
+    function accessElement(index) {
+      const selectedFruit = fruits[index];
+      document.getElementById("output").innerHTML = 
+        `Code: <code>fruits[${index}]</code> <br> Output: <strong>"${selectedFruit}"</strong>`;
+    }
+
+    // Function to demonstrate array length property
+    function showLength() {
+      document.getElementById("output").innerHTML = 
+        `Code: <code>fruits.length</code> <br> Output: <strong>${fruits.length} items</strong>`;
+    }
+  </script>
+
+</body>
+</html>
