@@ -1,12 +1,10 @@
-// 1. Define the JavaScript Object storing profile details
-const motherProfile = {
-  relation: "My Mother",
-  fullName: "Farheen Usman",
-  hobby: "Cooking",
-  superpower: "Always knowing where lost things are!",
-  favoriteQuote: "Kindness is a language that the deaf can hear and the blind can see.",
-  imageURL: "https://pngtree.com/freepng/mother-and-child-in-heart-shaped-art_20543503.html" // Replace with your mother's photo URL
-};
+function openZoo() {
+  // 1. Animal data array
+  const zooData = [
+    { name: "Lions", count: 3, emoji: "🦁" },
+    { name: "Elephants", count: 2, emoji: "🐘" },
+    { name: "Monkeys", count: 5, emoji: "🐒" }
+  ];
 
   // 2. Select elements using the DOM
   const zone1 = document.getElementById("zone1");

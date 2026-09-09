@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Data Structure and Array</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #222;
+            margin-top: 0;
+        }
+
+        .section {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #444;
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        .output {
+            background: #eef7ee;
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Object Data Structure and Array Demo</h1>
+    <p>This page demonstrates creating JavaScript objects and arrays, accessing values via object keys and array indices, and using methods like <code>join()</code> and <code>pop()</code>.</p>
+
+    <!-- Section 1: Object Data Structure -->
+    <div class="section">
+        <h2>1. Object Data Structure</h2>
+        <p>Accessing data using object keys:</p>
+        <pre><code>const student = {
+    name: "Alex",
+    age: 20,
+    course: "Computer Science"
+};
+
+// Accessing properties using keys
+document.getElementById('obj-output').innerText = 
+    `Name: ${student.name}, Age: ${student["age"]}, Course: ${student.course}`;</code></pre>
+        <div id="obj-output" class="output"></div>
+    </div>
+
+    <!-- Section 2: Array Access by Index -->
+    <div class="section">
+        <h2>2. Array Access by Index Value</h2>
+        <p>Accessing individual elements using zero-based indices:</p>
+        <pre><code>const fruits = ["Apple", "Banana", "Cherry", "Date"];
+
+// Accessing by index
+document.getElementById('array-index-output').innerText = 
+    `First element (index 0): ${fruits[0]} | Third element (index 2): ${fruits[2]}`;</code></pre>
+        <div id="array-index-output" class="output"></div>
+    </div>
+
+    <!-- Section 3: Array Methods (join and pop) -->
+    <div class="section">
+        <h2>3. Array Methods: <code>join()</code> and <code>pop()</code></h2>
+        <p>Current Array: <span id="current-array"></span></p>
+
+        <button class="btn" onclick="popElement()">Run pop()</button>
+        <button class="btn" onclick="joinElements()">Run join(' - ')</button>
+
+        <div id="method-output" class="output" style="margin-top: 15px;">Output will appear here.</div>
+    </div>
+</div>
+
+<script>
+    // 1. Object Implementation
+    const student = {
+        name: "Alex",
+        age: 20,
+        course: "Computer Science"
+    };
+
+    document.getElementById('obj-output').innerText = 
+        `Name: ${student.name} | Age: ${student["age"]} | Course: ${student.course}`;
+
+    // 2. Array Access by Index Implementation
+    const colors = ["Red", "Green", "Blue", "Yellow"];
+    document.getElementById('array-index-output').innerText = 
+        `Index 0: ${colors[0]} | Index 2: ${colors[2]}`;
+
+    // 3. Array Join and Pop Implementation
+    let stackArray = ["JavaScript", "Python", "C++", "Java", "Ruby"];
+
+    function updateArrayDisplay() {
+        document.getElementById('current-array').innerText = `[ ${stackArray.map(item => `"${item}"`).join(', ')} ]`;
+    }
+
+    function popElement() {
+        if (stackArray.length > 0) {
+            const poppedItem = stackArray.pop();
+            document.getElementById('method-output').innerText = 
+                `Popped Item: "${poppedItem}" | Remaining items: ${stackArray.length}`;
+            updateArrayDisplay();
+        } else {
+            document.getElementById('method-output').innerText = "Array is empty! Cannot pop further.";
+        }
+    }
+
+    function joinElements() {
+        const joinedString = stackArray.join(' - ');
+        document.getElementById('method-output').innerText = 
+            `Joined Array String: "${joinedString}"`;
+    }
+
+    // Initialize display
+    updateArrayDisplay();
+</script>
+
+</body>
+</html>
