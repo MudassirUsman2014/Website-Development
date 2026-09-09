@@ -1,0 +1,13 @@
+/* Transition for smooth background color change */
+body {
+  transition: background-color 0.5s ease-in-out;
+}
+
+/* Custom dashed border for empty state */
+.border-dashed {
+  border: 2px dashed #6c757d !important;
+}
+
+.zone-active {
+  border: 2px solid #198754 !important;
+}
