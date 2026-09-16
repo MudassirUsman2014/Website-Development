@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Planet Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .cards-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .card1 {
+      background-color: #1e1e1e;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      min-height: 120px;
+      background-image: url("https://c02.purpledshub.com/uploads/sites/41/2025/11/mars-red-surface.jpg?webp=1&w=1200");
+      background-size: cover;
+      background-position: center;
+    }
+
+    
+    .card2 {
+      background-color: #1e1e1e;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      min-height: 120px;
+      background-image: url("https://i.ytimg.com/vi/KTDnXzo2ifU/sddefault.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+    .card3 {
+      background-color: #1e1e1e;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      min-height: 120px;
+      background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQhDs8K9PqvZWWqZf4BUX2YXQcQwkFPu6Z-I0NtGua_-Lee5dJQQXo8kzQ&s=1024");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card1 h2, .card2 h2, .card3 h2 {
+      margin-top: 0;
+      color: #4da6ff;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Planet Cards</h1>
+  <button onclick="showPlanets()">Show Planets!</button>
+
+  <div class="cards-container">
+    <div id="card1" class="card1">Click the button to reveal a planet!</div>
+    <div id="card2" class="card2">Click the button to reveal a planet!</div>
+    <div id="card3" class="card3">Click the button to reveal a planet!</div>
+  </div>
+
+  <script>
+    // Define the Planet class
+    class Planet {
+      constructor(name, fact) {
+        this.name = name;
+        this.fact = fact;
+      }
+    }
+
+    // Function to instantiate objects and update cards
+    function showPlanets() {
+      // Create 3 Planet objects
+      const planet1 = new Planet("Mars", "Mars is home to Olympus Mons, the tallest volcano in the solar system.");
+      const planet2 = new Planet("Jupiter", "Jupiter has a Great Red Spot, which is a giant storm larger than Earth.");
+      const planet3 = new Planet("Saturn", "Saturn's beautiful rings are made mostly of ice and dust.");
+
+      // Populate cards using innerHTML
+      document.getElementById("card1").innerHTML = `<h2>${planet1.name}</h2><p>${planet1.fact}</p>`;
+      document.getElementById("card2").innerHTML = `<h2>${planet2.name}</h2><p>${planet2.fact}</p>`;
+      document.getElementById("card3").innerHTML = `<h2>${planet3.name}</h2><p>${planet3.fact}</p>`;
+    }
+  </script>
+
+</body>
+</html>
