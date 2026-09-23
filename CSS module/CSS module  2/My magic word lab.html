@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Magic Word Lab</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+    .card {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: none;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      font-weight: bold;
+    }
+    .result-box {
+      background-color: #eef2f7;
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <h1 class="text-center mb-4 text-primary">✨ My Magic Word Lab ✨</h1>
+    
+    <div class="row g-4">
+      
+      <!-- Card 1: Data Types Inspector -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-primary text-white">
+            1. Data Types Inspector (<code>typeof</code>)
+          </div>
+          <div class="card-body">
+            <p class="card-text">Inspect the data types of predefined variables: a score, a name, and a game-over flag.</p>
+            <button class="btn btn-primary mb-3" onclick="inspectTypes()">Inspect Variables</button>
+            <div id="card1-result" class="result-box">Click the button to reveal data types.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Type Converter -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-success text-white">
+            2. Type Converter (<code>String()</code> & <code>Number()</code>)
+          </div>
+          <div class="card-body">
+            <p class="card-text">Type a value to convert it between String and Number formats.</p>
+            <div class="mb-3">
+              <input type="text" id="convert-input" class="form-control" placeholder="Enter a value (e.g., 42)">
+            </div>
+            <button class="btn btn-success me-2" onclick="convertToString()">Convert to String</button>
+            <button class="btn btn-outline-success" onclick="convertToNumber()">Convert to Number</button>
+            <div id="card2-result" class="result-box">Enter a value and choose a conversion.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Word Search & Replace -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-dark">
+            3. Search & Replace (<code>search()</code> & <code>replace()</code>)
+          </div>
+          <div class="card-body">
+            <p class="card-text">Modify words inside a magic sentence dynamically.</p>
+            <div class="mb-2">
+              <label class="form-label"><strong>Sentence:</strong></label>
+              <input type="text" id="sentence-input" class="form-control" value="The magic dragon loves shiny gold stars.">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col">
+                <input type="text" id="search-word" class="form-control" placeholder="Search word (e.g., dragon)">
+              </div>
+              <div class="col">
+                <input type="text" id="replace-word" class="form-control" placeholder="Replace word (e.g., unicorn)">
+              </div>
+            </div>
+            <button class="btn btn-warning me-2" onclick="findWord()">Search Position</button>
+            <button class="btn btn-outline-dark" onclick="replaceWord()">Replace Word</button>
+            <div id="card3-result" class="result-box">Result will appear here.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Safe Division Operator -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-danger text-white">
+            4. Safe Division (<code>try / catch</code>)
+          </div>
+          <div class="card-body">
+            <p class="card-text">Divide 100 by any input safely using exception handling.</p>
+            <div class="mb-3">
+              <input type="text" id="divisor-input" class="form-control" placeholder="Enter a divisor (e.g., 5 or 0 or text)">
+            </div>
+            <button class="btn btn-danger" onclick="safeDivide()">Divide 100</button>
+            <div id="card4-result" class="result-box">Enter a number to perform division.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Card 1: Data Types Inspector
+    function inspectTypes() {
+      const score = 100;
+      const name = "Wizard Alex";
+      const isGameOver = false;
+
+      const output = `
+        <strong>score</strong> = ${score} (Type: <code>${typeof score}</code>)<br>
+        <strong>name</strong> = "${name}" (Type: <code>${typeof name}</code>)<br>
+        <strong>isGameOver</strong> = ${isGameOver} (Type: <code>${typeof isGameOver}</code>)
+      `;
+      document.getElementById('card1-result').innerHTML = output;
+    }
+
+    // Card 2: Type Converter
+    function convertToString() {
+      const inputVal = document.getElementById('convert-input').value;
+      if (inputVal === '') {
+        document.getElementById('card2-result').innerText = 'Please enter a value first.';
+        return;
+      }
+      const converted = String(inputVal);
+      document.getElementById('card2-result').innerHTML = 
+        `Converted to <strong>String</strong>: "${converted}" | Type: <code>${typeof converted}</code>`;
+    }
+
+    function convertToNumber() {
+      const inputVal = document.getElementById('convert-input').value;
+      if (inputVal === '') {
+        document.getElementById('card2-result').innerText = 'Please enter a value first.';
+        return;
+      }
+      const converted = Number(inputVal);
+      document.getElementById('card2-result').innerHTML = 
+        `Converted to <strong>Number</strong>: ${converted} | Type: <code>${typeof converted}</code>`;
+    }
+
+    // Card 3: Word Search & Replace
+    function findWord() {
+      const sentence = document.getElementById('sentence-input').value;
+      const target = document.getElementById('search-word').value;
+      
+      if (!target) {
+        document.getElementById('card3-result').innerText = 'Please enter a word to search for.';
+        return;
+      }
+
+      const index = sentence.search(new RegExp(target, "i"));
+      if (index !== -1) {
+        document.getElementById('card3-result').innerHTML = `Found "${target}" at index position: <strong>${index}</strong>`;
+      } else {
+        document.getElementById('card3-result').innerHTML = `Word "${target}" was <strong>not found</strong> in the sentence.`;
+      }
+    }
+
+    function replaceWord() {
+      const sentence = document.getElementById('sentence-input').value;
+      const target = document.getElementById('search-word').value;
+      const replacement = document.getElementById('replace-word').value;
+
+      if (!target || !replacement) {
+        document.getElementById('card3-result').innerText = 'Please fill in both search and replace inputs.';
+        return;
+      }
+
+      const newSentence = sentence.replace(new RegExp(target, "gi"), replacement);
+      document.getElementById('sentence-input').value = newSentence;
+      document.getElementById('card3-result').innerHTML = `Updated sentence:<br>"${newSentence}"`;
+    }
+
+    // Card 4: Safe Division Operator
+    function safeDivide() {
+      const input = document.getElementById('divisor-input').value.trim();
+      const resultBox = document.getElementById('card4-result');
+
+      try {
+        if (input === "") {
+          throw new Error("Input cannot be empty!");
+        }
+
+        const divisor = Number(input);
+
+        if (isNaN(divisor)) {
+          throw new Error("Invalid input! Please enter a valid number.");
+        }
+
+        if (divisor === 0) {
+          throw new Error("Cannot divide by zero!");
+        }
+
+        const result = 100 / divisor;
+        resultBox.innerHTML = `Success: 100 ÷ ${divisor} = <strong>${result}</strong>`;
+        resultBox.className = "result-box text-success";
+
+      } catch (error) {
+        resultBox.innerHTML = `Error Caught: <strong>${error.message}</strong>`;
+        resultBox.className = "result-box text-danger";
+      }
+    }
+  </script>
+</body>
+</html>
