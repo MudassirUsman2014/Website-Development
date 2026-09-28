@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Delivery Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    #save-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #save-btn:hover {
+      background-color: #0056b3;
+    }
+
+    #delivery-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #delivery-btn:hover {
+      background-color: #218838;
+    }
+
+    button:disabled {
+      background-color: #cccccc !important;
+      cursor: not-allowed;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #555;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 6px 0;
+      border-bottom: 1px dashed #e0e0e0;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .value {
+      color: #222;
+      word-break: break-all;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      background-color: #e9ecef;
+      color: #495057;
+    }
+
+    .status-badge.active {
+      background-color: #e2f0d9;
+      color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>My Delivery Tracker</h1>
+
+    <div class="button-group">
+      <button id="save-btn" onclick="saveOrder()">Save Order</button>
+      <button id="delivery-btn" onclick="startDelivery()">Start Delivery</button>
+    </div>
+
+    <!-- Order Details Section -->
+    <div class="section">
+      <h2>Order Details</h2>
+      <div class="row">
+        <span class="label">Item:</span>
+        <span id="order-item" class="value">-</span>
+      </div>
+      <div class="row">
+        <span class="label">Price:</span>
+        <span id="order-price" class="value">-</span>
+      </div>
+      <div class="row">
+        <span class="label">Shop:</span>
+        <span id="order-shop" class="value">-</span>
+      </div>
+      <div class="row">
+        <span class="label">JSON Stringified:</span>
+        <span id="order-json" class="value">-</span>
+      </div>
+    </div>
+
+    <!-- Delivery Status Section -->
+    <div class="section">
+      <h2>Delivery Progress</h2>
+      <div class="row">
+        <span class="label">Current Status:</span>
+        <span id="delivery-status" class="status-badge">Idle</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript Order Object
+    const order = {
+      item: "Pizza",
+      price: "$15",
+      shop: "My Snack Shop"
+    };
+
+    // 1. JSON Stringify & Parse Handler
+    function saveOrder() {
+      // Convert JS Object to JSON String
+      const jsonText = JSON.stringify(order);
+      
+      // Parse JSON String back into JS Object
+      const loadedOrder = JSON.parse(jsonText);
+
+      // Update Labelled Rows in UI
+      document.getElementById("order-item").textContent = loadedOrder.item;
+      document.getElementById("order-price").textContent = loadedOrder.price;
+      document.getElementById("order-shop").textContent = loadedOrder.shop;
+      document.getElementById("order-json").textContent = jsonText;
+    }
+
+    // Helper Promise for Async Delay using setTimeout
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // 2. Asynchronous Delivery Stages Handler
+    async function startDelivery() {
+      const deliveryBtn = document.getElementById("delivery-btn");
+      const statusElement = document.getElementById("delivery-status");
+
+      // Disable button during process
+      deliveryBtn.disabled = true;
+      statusElement.classList.add("active");
+
+      const stages = [
+        "Order Received",
+        "Preparing Food",
+        "Out for Delivery",
+        "Delivered!"
+      ];
+
+      for (let i = 0; i < stages.length; i++) {
+        statusElement.textContent = stages[i];
+        
+        // Wait 2 seconds before moving to the next stage (if not last)
+        if (i < stages.length - 1) {
+          await delay(2000);
+        }
+      }
+
+      // Re-enable button
+      deliveryBtn.disabled = false;
+    }
+  </script>
+
+</body>
+</html>
