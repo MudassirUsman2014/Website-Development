@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HHS High School Gulshan</title>
+  <style>
+    /* Reset margins and paddings */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Enable smooth scrolling across the entire page */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Fixed Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0d233a; /* Deep navy blue */
+      border-bottom: 4px solid #e6a100; /* Gold accent line */
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* Brand Logo / School Name */
+    .brand-logo {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .brand-logo span {
+      color: #e6a100;
+    }
+
+    /* Navigation Links */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 14px;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .nav-links a:hover {
+      background-color: #e6a100;
+      color: #0d233a;
+    }
+
+    /* Page Content Sections */
+    main {
+      margin-top: 70px; /* Offset for fixed navigation bar */
+    }
+
+    .section {
+      padding: 80px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 100px 40px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-top: 20px;
+    }
+
+    .section h1, .section h2 {
+      color: #0d233a;
+      margin-bottom: 16px;
+    }
+
+    .section p {
+      font-size: 17px;
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #0d233a;
+      color: #ffffff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="#home" class="brand-logo">HHS <span>Gulshan Campus</span></a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#academics">Academics</a></li>
+      <li><a href="#admissions">Admissions</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content Sections with IDs matching the Nav Links -->
+  <main>
+    
+    <!-- Home Section -->
+    <section id="home" class="section hero-section">
+      <h1>Welcome to Happy Home School - Gulshan Campus</h1>
+      <p>
+        Providing quality education, character building, and academic excellence. 
+        Use the navigation bar above to jump directly to different sections of our page.
+      </p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <h2>About Us</h2>
+      <p>
+        Happy Home School Gulshan Campus focuses on developing holistic individuals 
+        equipped with knowledge, moral values, and critical thinking skills needed for future success.
+      </p>
+    </section>
+
+    <!-- Academics Section -->
+    <section id="academics" class="section">
+      <h2>Academics</h2>
+      <p>
+        We offer a comprehensive curriculum covering Primary, Secondary, and O-Level tracks, supported 
+        by modern science labs, computer suites, and well-rounded co-curricular programs.
+      </p>
+    </section>
+
+    <!-- Admissions Section -->
+    <section id="admissions" class="section">
+      <h2>Admissions</h2>
+      <p>
+        Admissions are open for the upcoming academic session. Parents can visit our administration office 
+        or complete registration details through our admission desk.
+      </p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+      <h2>Contact Us</h2>
+      <p><strong>Address:</strong> Gulshan-e-Iqbal, Karachi, Pakistan</p>
+      <p><strong>Email:</strong> info@hhs.edu.pk</p>
+      <p><strong>Phone:</strong> +92 21 111 447 447</p>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; Happy Home School Gulshan Campus. All rights reserved.
+  </footer>
+
+</body>
+</html>
