@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Susan's Restaurant - Interactive Menu</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation Bar */
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Banner / Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Container for Layout */
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Section Component */
+    .about-section {
+      background-color: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .about-section h2 {
+      margin-bottom: 1rem;
+      color: #e74c3c;
+    }
+
+    /* Portfolio Section with CSS Grid */
+    .portfolio-section h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Portfolio Item Cards */
+    .card {
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1.2rem;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      color: #333;
+    }
+
+    .card-price {
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .click-hint {
+      margin-top: 0.8rem;
+      display: inline-block;
+      font-size: 0.85rem;
+      color: #e74c3c;
+      font-weight: 600;
+    }
+
+    /* Modal / Pop-up Page Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-hero-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+
+    .modal-price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .checkbox-group label {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .order-btn {
+      width: 100%;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .order-btn:hover {
+      background-color: #219150;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: #fff;
+      text-align: center;
+      padding: 1.5rem 0;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <h1>Susan's Restaurant</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#portfolio">Our Menu</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Banner Image Section -->
+  <div class="hero" id="home">
+    <h1>Welcome to Susan's Restaurant</h1>
+    <p>Click on any dish below to customize and order!</p>
+  </div>
+
+  <main class="container">
+    <!-- About Section -->
+    <div class="about-section" id="about">
+      <h2>About Our Restaurant</h2>
+      <p>
+        At Susan's Restaurant, we take pride in serving delicious, high-quality meals crafted from locally sourced ingredients.
+      </p>
+    </div>
+
+    <!-- Portfolio / Dishes Section -->
+    <div class="portfolio-section" id="portfolio">
+      <h2>Our Featured Menu Portfolio</h2>
+      
+      <div class="portfolio-grid">
+        <!-- Item 1 -->
+        <div class="card" onclick="openOrderModal('Fresh Garden Salad', 9.99, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80')">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" alt="Fresh Garden Salad">
+          <div class="card-body">
+            <h3 class="card-title">Fresh Garden Salad</h3>
+            <p class="card-price">$9.99</p>
+            <p class="card-text">A refreshing blend of organic greens, cherry tomatoes, cucumbers, and house-made vinaigrette.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="card" onclick="openOrderModal('Wood-Fired Margherita Pizza', 14.99, 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80')">
+          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Wood-Fired Pizza">
+          <div class="card-body">
+            <h3 class="card-title">Wood-Fired Margherita Pizza</h3>
+            <p class="card-price">$14.99</p>
+            <p class="card-text">Traditional stone-baked pizza topped with fresh mozzarella, basil leaves, and tomato sauce.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="card" onclick="openOrderModal('Gourmet Beef Burger', 13.50, 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80')">
+          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" alt="Gourmet Beef Burger">
+          <div class="card-body">
+            <h3 class="card-title">Gourmet Beef Burger</h3>
+            <p class="card-price">$13.50</p>
+            <p class="card-text">Juicy grilled beef patty topped with cheddar cheese, caramelized onions, crisp lettuce, and special sauce.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="card" onclick="openOrderModal('Creamy Fettuccine Alfredo', 12.99, 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80')">
+          <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80" alt="Creamy Pasta Alfredo">
+          <div class="card-body">
+            <h3 class="card-title">Creamy Fettuccine Alfredo</h3>
+            <p class="card-price">$12.99</p>
+            <p class="card-text">Classic fettuccine pasta tossed in a rich butter, garlic, and Parmesan cream sauce.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="card" onclick="openOrderModal('Chocolate Lava Cake', 7.50, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNWW0MZgnvIiXDJXKLCgXs_WoFCPQlw5i45PoXaFPDXWL3ICB1KyAeqoij_zGxQ9eODMNOTiHbX1GNa_FPVvsu4EaC8g-g8joC2sCkUdn-&s=10')">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNWW0MZgnvIiXDJXKLCgXs_WoFCPQlw5i45PoXaFPDXWL3ICB1KyAeqoij_zGxQ9eODMNOTiHbX1GNa_FPVvsu4EaC8g-g8joC2sCkUdn-&s=10" alt="Chocolate Molten Cake">
+          <div class="card-body">
+            <h3 class="card-title">Chocolate Lava Cake</h3>
+            <p class="card-price">$7.50</p>
+            <p class="card-text">Warm chocolate cake with a molten center, served with a scoop of premium vanilla bean ice cream.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="card" onclick="openOrderModal('Mixed Berry Smoothie', 5.99, 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80')">
+          <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80" alt="Berry Smoothie">
+          <div class="card-body">
+            <h3 class="card-title">Mixed Berry Smoothie</h3>
+            <p class="card-price">$5.99</p>
+            <p class="card-text">A blend of fresh strawberries, blueberries, raspberries, and Greek yogurt topped with mint leaves.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+        
+        <div class="card" onclick="openOrderModal('Fried Rice', 10.50, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsyaNYuZ8aA2p-QAyOgk-qgpYUBk_CeQamR6-OZvyVEw&s=10')">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsyaNYuZ8aA2p-QAyOgk-qgpYUBk_CeQamR6-OZvyVEw&s=10" alt="Fried Rice">
+          <div class="card-body">
+            <h3 class="card-title">Fried Rice</h3>
+            <p class="card-price">$10.50</p>
+            <p class="card-text">Stir-fried rice with vegetables and your choice of protein.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+        </div>
+        <div class="card" onclick="openOrderModal('Chicken Chowmein', 9.50, 'https://www.recipetineats.com/tachyon/2018/08/Chow-Mein_1.jpg')">
+          <img src="https://www.recipetineats.com/tachyon/2018/08/Chow-Mein_1.jpg" alt="Chicken Chowmein">
+          <div class="card-body">
+            <h3 class="card-title">Chicken Chowmein</h3>
+            <p class="card-price">$9.50</p>
+            <p class="card-text">Stir-fried noodles with tender chicken and fresh vegetables.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+          </div>
+         <div class="card" onclick="openOrderModal('Chicken Corn Soup', 9.50, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTthA5UGJr5Egs7UKq4oEJlEZSyD_xgklrZZIAM8-9ww&s=10')">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTthA5UGJr5Egs7UKq4oEJlEZSyD_xgklrZZIAM8-9ww&s=10" alt="Chicken Corn Soup">
+          <div class="card-body">
+            <h3 class="card-title">Chicken Corn Soup</h3>
+            <p class="card-price">$9.50</p>
+            <p class="card-text">A comforting soup with tender chicken and sweet corn.</p>
+            <span class="click-hint">Click to Customize &rarr;</span>
+          </div>
+          </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Detail Modal/Sub-page Overlay -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeOrderModal()">&times;</span>
+      <img id="modalImg" class="modal-hero-img" src="" alt="Item Image">
+      <div class="modal-body">
+        <h3 id="modalTitle" class="modal-title">Dish Title</h3>
+        <p id="modalPrice" class="modal-price">$0.00</p>
+        
+        <form onsubmit="submitOrder(event)">
+          <!-- Number of Servings -->
+          <div class="form-group">
+            <label for="servings">Number of Servings:</label>
+            <input type="number" id="servings" min="1" max="20" value="1" required>
+          </div>
+
+          <!-- Extra Toppings Selection -->
+          <div class="form-group">
+            <label>Extra Toppings / Add-ons:</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" value="Extra Cheese"> Extra Cheese (+$1.50)</label>
+              <label><input type="checkbox" value="Garlic Sauce"> Garlic Sauce (+$0.75)</label>
+              <label><input type="checkbox" value="Spicy Chili Flakes"> Spicy Chili Flakes (+$0.50)</label>
+              <label><input type="checkbox" value="Extra Protein"> Extra Protein/Chicken (+$3.00)</label>
+            </div>
+          </div>
+
+          <button type="submit" class="order-btn">Confirm & Add to Order</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>&copy; 2026 Susan's Bistro. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript Functions -->
+  <script>
+    function openOrderModal(itemName, itemPrice, itemImg) {
+      document.getElementById('modalTitle').innerText = itemName;
+      document.getElementById('modalPrice').innerText = '$' + itemPrice.toFixed(2);
+      document.getElementById('modalImg').src = itemImg;
+      document.getElementById('servings').value = 1;
+      
+      // Uncheck all toppings
+      const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+      checkboxes.forEach(cb => cb.checked = false);
+
+      document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      const itemName = document.getElementById('modalTitle').innerText;
+      const servings = document.getElementById('servings').value;
+      
+      const selectedToppings = [];
+      const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+      checkboxes.forEach(cb => selectedToppings.push(cb.value));
+
+      let toppingsText = selectedToppings.length > 0 ? selectedToppings.join(', ') : 'None';
+
+      alert(`Order Confirmed!\n\nItem: ${itemName}\nServings: ${servings}\nToppings: ${toppingsText}`);
+      closeOrderModal();
+    }
+  </script>
+
+</body>
+</html>
